@@ -8,3 +8,16 @@ C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\obj\Debug\turksatde
 C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\obj\Debug\turksatdeneme_6.csproj.CoreCompileInputs.cache
 C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\obj\Debug\turksatdeneme_6.exe
 C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\obj\Debug\turksatdeneme_6.pdb
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.dll
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Imaging.dll
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Math.dll
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Video.DirectShow.dll
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Video.dll
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.xml
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Imaging.xml
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Math.xml
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Video.xml
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\AForge.Video.DirectShow.xml
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\obj\Debug\turksatdeneme_6.csproj.CopyComplete
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\LiteDB.dll
+C:\Users\CASPER\Source\Repos\turksatdeneme_6\turksatdeneme_6\bin\Debug\LiteDB.xml
