@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using System.Windows.Forms;
+using System.IO.Ports;
 using System.Diagnostics;
+
 
 namespace turksatdeneme_6
 {
@@ -44,7 +46,7 @@ namespace turksatdeneme_6
         private void Form1_Load_1(object sender, EventArgs e)
         {
 
-            webcam = new 
+            webcam = new
             FilterInfoCollection(FilterCategory.VideoInputDevice); //webcam dizisine mevcut kameraları dolduruyoruz.
             foreach (FilterInfo item in webcam)
             {
@@ -53,7 +55,9 @@ namespace turksatdeneme_6
             comboBox1.SelectedIndex = 0;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.DataSource = Telemetri.GetAll();
-
+            string[] ports = SerialPort.GetPortNames();
+            foreach (string port in ports)
+                Telemetri.Add(port);
 
         }
 
@@ -76,18 +80,33 @@ namespace turksatdeneme_6
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
 
-        private void tmrRefresh_Tick(object sender, EventArgs e)
+        private void tmrRefresh_Tick(object sender, EventArgs e)// timer ile gelen verileri saniyede bir yenilemeyi sağlayan fonksiyonumuz.
         {
-          //  Telemetri.Add(new Telemetri {Basinc=12, Donus_Sayisi=315 ,Roll=365, GPS_Long=234, Gonderme_Zamani= DateTime.Now
-            //, GPS_Lot= 3654, Inis_Hizi=3657, Paket_No=5372, Pil_Gerilimi=457, Pitch=357, RPM=34, Sicaklik=537, Yaw=12456, Yukseklik=1456});
+            Telemetri.Add(new Telemetri
+            {
+                Basinc = 12,
+                Donus_Sayisi = 315,
+                Roll = 365,
+                GPS_Long = 234,
+                Gonderme_Zamani = DateTime.Now,
+                Takim_No = 55502,
+                GPS_Lot = 3654,
+                Inis_Hizi = 3657,
+                Paket_No = 5372,
+                Pil_Gerilimi = 457,
+                Pitch = 357,
+                RPM = 34,
+                Yaw = 12456,
+                Yukseklik = 1456,
+            });
         }
+            private void Sayfa2_Click(object sender, EventArgs e)
+            {
 
-        private void Sayfa2_Click(object sender, EventArgs e)
-        {
-
-        }
+            }
+        
     }
 }

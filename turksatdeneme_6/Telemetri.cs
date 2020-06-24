@@ -13,6 +13,7 @@ namespace turksatdeneme_6
     {
         private static LiteDatabase db = new LiteDatabase(@"database.db");
 
+        //Litedb ile database de tutulacak verileri bu envertere ekliyoruz.
         public int Paket_No { get; set; }
         public DateTime Gonderme_Zamani { get; set; }
         public float Basinc { get; set; }
@@ -27,18 +28,24 @@ namespace turksatdeneme_6
         public float Roll { get; set; }
         public float Yaw { get; set; }
         public float Donus_Sayisi { get; set; }
+        public int Takim_No { get; set; }
 
 
-
-        public static void Add(Telemetri telemetri)
+        public static void Add(Telemetri telemetri)//ekle fonksiyonu oluşturarak datalarımızı value olarak ekliyoruz.
         {
+           
             var telemetries = db.GetCollection<Telemetri>();
             telemetries.Insert(telemetri);
         }
 
-        public static List<Telemetri> GetAll()
+        public static List<Telemetri> GetAll()//tümünüü listele fonksiyonu oluşturarak verilerin hepsini okuyop listeliyoruz.
         {
             return db.GetCollection<Telemetri>().FindAll().OrderByDescending(t=>t.Gonderme_Zamani).ToList();
-         }       
+         }
+
+        internal static void Add(string port)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
