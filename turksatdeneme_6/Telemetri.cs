@@ -14,26 +14,25 @@ namespace turksatdeneme_6
         private static LiteDatabase db = new LiteDatabase(@"database.db");
 
         //Litedb ile database de tutulacak verileri bu envertere ekliyoruz.
-        public int Paket_No { get; set; }
-        public DateTime Gonderme_Zamani { get; set; }
-        public float Basinc { get; set; }
-        public float Yukseklik{ get; set; }
-        public float Inis_Hizi { get; set; }
-        public float Sicaklik { get; set; }
-        public float Pil_Gerilimi { get; set; }
-        public float RPM { get; set; }
-        public float GPS_Long { get; set; }
-        public float GPS_Lot { get; set; }
-        public float Pitch { get; set; }
-        public float Roll { get; set; }
-        public float Yaw { get; set; }
-        public float Donus_Sayisi { get; set; }
-        public int Takim_No { get; set; }
+        public int Paket_No { get; set; } //0
+        public DateTime Gonderme_Zamani { get; set; } //1
+        public float Basinc { get; set; } //2
+        public float Yukseklik{ get; set; } //3
+        public float Inis_Hizi { get; set; }//4
+        public float Sicaklik { get; set; }//5
+        public float Pil_Gerilimi { get; set; }//6
+        public float RPM { get; set; }//7
+        public float GPS_Long { get; set; }//8
+        public float GPS_Lot { get; set; }//9
+        public float Pitch { get; set; }//10
+        public float Roll { get; set; }//11
+        public float Yaw { get; set; }//12
+        public float Donus_Sayisi { get; set; }//13
+        public int Takim_No { get; set; }//14
 
 
         public static void Add(Telemetri telemetri)//ekle fonksiyonu oluşturarak datalarımızı value olarak ekliyoruz.
         {
-           
             var telemetries = db.GetCollection<Telemetri>();
             telemetries.Insert(telemetri);
         }
@@ -43,9 +42,6 @@ namespace turksatdeneme_6
             return db.GetCollection<Telemetri>().FindAll().OrderByDescending(t=>t.Gonderme_Zamani).ToList();
          }
 
-        internal static void Add(string port)
-        {
-            throw new NotImplementedException();
-        }
+        internal static object ListenSerial() => throw new NotImplementedException();
     }
 }

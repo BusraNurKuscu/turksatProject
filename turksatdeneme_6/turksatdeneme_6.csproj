@@ -161,7 +161,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sicaklik.cs" />
     <Compile Include="Telemetri.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
