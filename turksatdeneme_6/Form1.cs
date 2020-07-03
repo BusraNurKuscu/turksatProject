@@ -108,8 +108,8 @@ namespace turksatdeneme_6
 
         private void tmrRefresh_Tick(object sender, EventArgs e)// timer ile gelen verileri saniyede bir yenilemeyi sağlayan fonksiyonumuz.
         {
-            //      Port.Open();
-            serialPort1.Write(dataGridView1.Rows[0].Cells[1].Value.ToString());
+            //4      Port.Open();
+            //serialPort1.Write(dataGridView1.Rows[0].Cells[1].Value.ToString());
             string Sicaklik = Port.ReadExisting();
             dataGridView1.DataSource = Telemetri.GetAll();
                  if (Sicaklik != null && Sicaklik != "" && Sicaklik[0] != '.')
