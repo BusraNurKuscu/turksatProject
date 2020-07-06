@@ -17,18 +17,27 @@ namespace turksatdeneme_6
 {
     public partial class Form1 : Form
     {
-        public bool IsClosed { get; private set; }
         private FilterInfoCollection webcam; //webcam isminde tanımladığımız değişken bilgisayara kaç kamera bağlıysa onları tutan bir dizi.
         private VideoCaptureDevice cam; //cam ise bizim kullanacağımız aygıt.
-
-        //public object RowIndex { get; private set; }
+        public SerialPort Port { get; }
+        public bool IsClosed { get; private set; }
 
         public Form1()
         {
-            CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
+
             //com3 usb bağlıntısını kontrol ediyoruz ve bağlantının açılıp açılmadığını denetliyoruz
-           
+            Port = new System.IO.Ports.SerialPort();
+            Port.PortName = "COM7";
+            Port.BaudRate = 9600;
+            Port.ReadTimeout = 500;
+
+            try
+            {
+                Port.Open();
+            }
+            catch { }
+
         }
 
         void Cam_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -48,13 +57,10 @@ namespace turksatdeneme_6
             }
 
         }
-     
+
         private void Form1_Load_1(object sender, EventArgs e)
         {
 
-            //serial port verilerini dinliyoruz
-           Thread Hilo = new Thread(ListenSerial);
-            Hilo.Start();
             webcam = new
             FilterInfoCollection(FilterCategory.VideoInputDevice); //webcam dizisine mevcut kameraları dolduruyoruz.
             foreach (FilterInfo item in webcam)
@@ -63,26 +69,15 @@ namespace turksatdeneme_6
             }
             comboBox1.SelectedIndex = 0;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        }
+            //usb bağlantısını dinliyoruz
 
-        private void ListenSerial()
-        {
+            //xbee bağlantısını denetliyoruz
+            bool IsClosed = false;
+            //serial port verilerini dinliyoruz
+            Thread Hilo = new Thread(ListenSerial);
+            Hilo.Start();
 
 
-            while (!IsClosed)
-            {
-                try
-                {
-                    //xbee den dataları okuyoruz
-                    string TelemetriPaketi = Port.ReadLine();
-
-                    dataGridView1.Invoke(new MethodInvoker(
-                        delegate
-                        { dataGridView1.DataSource = TelemetriPaketi; }));
-
-                }
-                catch { }
-            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -91,6 +86,28 @@ namespace turksatdeneme_6
             VideoCaptureDevice(webcam[comboBox1.SelectedIndex].MonikerString); //başlaya basıldığıdnda yukarda tanımladığımız cam değişkenine comboboxta seçilmş olan kamerayı atıyoruz.
             cam.NewFrame += new NewFrameEventHandler(Cam_NewFrame);
             cam.Start(); //kamerayı başlatıyoruz.
+        }
+
+        private void ListenSerial()
+        {
+            while (!IsClosed)
+            {
+                try
+                {
+                    //Arduinodan dataları okuyoruz
+                    string bilgi = Port.ReadLine();
+
+                    //dataları textbox a yazdırıyoruz.
+                    txtDataSck.Invoke(new MethodInvoker(
+                        delegate
+                        {
+                            txtDataSck.Text = bilgi;
+                        }
+                        ));
+
+                }
+                catch { }
+            }
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -108,11 +125,7 @@ namespace turksatdeneme_6
 
         private void tmrRefresh_Tick(object sender, EventArgs e)// timer ile gelen verileri saniyede bir yenilemeyi sağlayan fonksiyonumuz.
         {
-            //4      Port.Open();
-            //serialPort1.Write(dataGridView1.Rows[0].Cells[1].Value.ToString());
-            string Sicaklik = Port.ReadExisting();
             dataGridView1.DataSource = Telemetri.GetAll();
-                 if (Sicaklik != null && Sicaklik != "" && Sicaklik[0] != '.')
             Telemetri.Add(new Telemetri
             {
 
@@ -130,31 +143,18 @@ namespace turksatdeneme_6
                 RPM = 34,
                 Yaw = 12456,
                 Yukseklik = 1456,
-              //  Sicaklik = (SerialPort.GetPortNames())
+               // Sicaklik = txtDataSck.Text.Length
             });
-           
+            
         }
+
         private void Sayfa2_Click(object sender, EventArgs e)
-            {
-
-            }
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //form kapandığında veri akışını kapatıoruz.
 
-            IsClosed = true;
-            if (Port.IsOpen)
-            Port.Close();
         }
-
-      /* private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-           
-        }*/
-
         private void Sayfa1_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -164,7 +164,7 @@ namespace turksatdeneme_6
 
         private void groupBox2_Enter(object sender, EventArgs e)
         {
-            
+
         }
 
         private void dataGridView1_DataSourceChanged(object sender, EventArgs e)
@@ -195,7 +195,7 @@ namespace turksatdeneme_6
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[9].Value.ToString()));
             this.chtHiz.Series["İniş Hızı"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[4].Value.ToString()));
-            this.chtPil.Series["Pil Gerilimi"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(), 
+            this.chtPil.Series["Pil Gerilimi"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[6].Value.ToString()));
             this.chtPtc.Series["Pitch"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[10].Value.ToString()));
@@ -209,27 +209,35 @@ namespace turksatdeneme_6
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[12].Value.ToString()));
             this.chtYks.Series["Yükseklik"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[3].Value.ToString()));
+
         }
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            System.IO.Ports.SerialPort Port;
 
-            Port
-                 = new System.IO.Ports.SerialPort
-                 {
-                     PortName = "COM3",
-                     BaudRate = 9600,
-                     ReadTimeout = 400
-                 };
-            try
-            {
-                Port.Open();
-            }
-            catch { }
+        }
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //form kapandığında veri akışını kapatıyoruz.
+
+            IsClosed = true;
+            if (Port.IsOpen)
+                Port.Close();
+        }    
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+           
+        }
+
+        private void txtDataSck_TextChanged(object sender, EventArgs e)
+        {
+         //   txtDataSck.Visible = false;
+        }
+
+        private void serialPort1_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+           
         }
     }
-
-      
-    
 }

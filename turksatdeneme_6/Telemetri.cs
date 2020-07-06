@@ -13,6 +13,8 @@ namespace turksatdeneme_6
     {
         private static LiteDatabase db = new LiteDatabase(@"database.db");
 
+        public static object Port1 { get; internal set; }
+
         //Litedb ile database de tutulacak verileri bu envertere ekliyoruz.
         public int Paket_No { get; set; } //0
         public DateTime Gonderme_Zamani { get; set; } //1
