@@ -96,14 +96,15 @@ namespace turksatdeneme_6
                 {
                     //Arduinodan dataları okuyoruz
                     string bilgi = Port.ReadLine();
-
+                    
                     //dataları textbox a yazdırıyoruz.
                     txtDataSck.Invoke(new MethodInvoker(
-                        delegate
-                        {
-                            txtDataSck.Text = bilgi;
-                        }
-                        ));
+                      delegate
+                      {
+                          txtDataSck.Text = bilgi;
+                      }
+                      ));
+
 
                 }
                 catch { }
@@ -128,7 +129,6 @@ namespace turksatdeneme_6
             dataGridView1.DataSource = Telemetri.GetAll();
             Telemetri.Add(new Telemetri
             {
-
                 Basinc = 2000,
                 Donus_Sayisi = 315,
                 Roll = 365,
@@ -143,7 +143,7 @@ namespace turksatdeneme_6
                 RPM = 34,
                 Yaw = 12456,
                 Yukseklik = 1456,
-               // Sicaklik = txtDataSck.Text.Length
+                Sicaklik =  float.Parse(txtDataSck.Text)/100
             });
             
         }
@@ -196,7 +196,7 @@ namespace turksatdeneme_6
             this.chtHiz.Series["İniş Hızı"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[4].Value.ToString()));
             this.chtPil.Series["Pil Gerilimi"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[6].Value.ToString()));
+              Convert.ToInt32(dataGridView1.Rows[1].Cells[6].Value.ToString()));
             this.chtPtc.Series["Pitch"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[10].Value.ToString()));
             this.chtRoll.Series["Roll"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
@@ -204,7 +204,7 @@ namespace turksatdeneme_6
             this.chtRPM.Series["RPM"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[7].Value.ToString()));
             this.chtSck.Series["Sıcaklık"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[5].Value.ToString()));
+                float.Parse(dataGridView1.Rows[1].Cells[5].Value.ToString()));
             this.chtYaw.Series["Yaw"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
                 Convert.ToInt32(dataGridView1.Rows[1].Cells[12].Value.ToString()));
             this.chtYks.Series["Yükseklik"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
@@ -232,7 +232,7 @@ namespace turksatdeneme_6
 
         private void txtDataSck_TextChanged(object sender, EventArgs e)
         {
-         //   txtDataSck.Visible = false;
+            txtDataSck.Visible = false;
         }
 
         private void serialPort1_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
