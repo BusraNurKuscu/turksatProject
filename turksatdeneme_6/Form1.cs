@@ -12,31 +12,38 @@ using System.IO.Ports;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
+using System.Windows.Forms.DataVisualization.Charting;
+using GMap.NET.MapProviders;
+using DocumentFormat.OpenXml.Spreadsheet;
+
 
 namespace turksatdeneme_6
 {
     public partial class Form1 : Form
     {
+        private static List<Telemetri> dataset;
+        private static string _data;
+        private static string _oldData;
         private FilterInfoCollection webcam; //webcam isminde tanımladığımız değişken bilgisayara kaç kamera bağlıysa onları tutan bir dizi.
         private VideoCaptureDevice cam; //cam ise bizim kullanacağımız aygıt.
-        public SerialPort Port { get; }
         public bool IsClosed { get; private set; }
-
+        
         public Form1()
         {
             InitializeComponent();
-
-            //com3 usb bağlıntısını kontrol ediyoruz ve bağlantının açılıp açılmadığını denetliyoruz
-            Port = new System.IO.Ports.SerialPort();
-            Port.PortName = "COM7";
-            Port.BaudRate = 9600;
-            Port.ReadTimeout = 500;
-
+           
+            while(true)
             try
             {
-                Port.Open();
+                if (serialPort1.IsOpen == false)
+                {
+                    serialPort1.Open();
+                    break;
+                }
             }
-            catch { }
+            catch (Exception e){
+                MessageBox.Show(e.Message);
+            }
 
         }
 
@@ -60,7 +67,24 @@ namespace turksatdeneme_6
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+           
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        string data = serialPort1.ReadLine();
+                        _data = data;
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Port okuma işlemi sonlandırıldı.");
+                    }
+                   
+                }
 
+            }).Start();
             webcam = new
             FilterInfoCollection(FilterCategory.VideoInputDevice); //webcam dizisine mevcut kameraları dolduruyoruz.
             foreach (FilterInfo item in webcam)
@@ -69,13 +93,6 @@ namespace turksatdeneme_6
             }
             comboBox1.SelectedIndex = 0;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            //usb bağlantısını dinliyoruz
-
-            //xbee bağlantısını denetliyoruz
-            bool IsClosed = false;
-            //serial port verilerini dinliyoruz
-            Thread Hilo = new Thread(ListenSerial);
-            Hilo.Start();
 
 
         }
@@ -88,28 +105,7 @@ namespace turksatdeneme_6
             cam.Start(); //kamerayı başlatıyoruz.
         }
 
-        private void ListenSerial()
-        {
-            while (!IsClosed)
-            {
-                try
-                {
-                    //Arduinodan dataları okuyoruz
-                    string bilgi = Port.ReadLine();
-                    
-                    //dataları textbox a yazdırıyoruz.
-                    txtDataSck.Invoke(new MethodInvoker(
-                      delegate
-                      {
-                          txtDataSck.Text = bilgi;
-                      }
-                      ));
-
-
-                }
-                catch { }
-            }
-        }
+      
 
         private void btnStop_Click(object sender, EventArgs e)
         {
@@ -120,124 +116,107 @@ namespace turksatdeneme_6
             }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
 
-        private void tmrRefresh_Tick(object sender, EventArgs e)// timer ile gelen verileri saniyede bir yenilemeyi sağlayan fonksiyonumuz.
-        {
-            dataGridView1.DataSource = Telemetri.GetAll();
-            Telemetri.Add(new Telemetri
-            {
-                Basinc = 2000,
-                Donus_Sayisi = 315,
-                Roll = 365,
-                GPS_Long = 234,
-                Gonderme_Zamani = DateTime.Now,
-                Takim_No = 55502,
-                GPS_Lot = 3654,
-                Inis_Hizi = 3657,
-                Paket_No = 5372,
-                Pil_Gerilimi = 457,
-                Pitch = 357,
-                RPM = 34,
-                Yaw = 12456,
-                Yukseklik = 1456,
-                Sicaklik =  float.Parse(txtDataSck.Text)/100
-            });
-            
-        }
+       
 
-        private void Sayfa2_Click(object sender, EventArgs e)
-        {
 
-        }
-        private void Sayfa1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
 
         private void dataGridView1_DataSourceChanged(object sender, EventArgs e)
         {
-            txtBsn.Text = dataGridView1.Rows[0].Cells[2].Value.ToString();
-            txtDns.Text = dataGridView1.Rows[0].Cells[13].Value.ToString();
-            txtGnd.Text = dataGridView1.Rows[0].Cells[1].Value.ToString();
-            txtGPSlg.Text = dataGridView1.Rows[0].Cells[8].Value.ToString();
-            txtGPSlt.Text = dataGridView1.Rows[0].Cells[9].Value.ToString();
-            txtPil.Text = dataGridView1.Rows[0].Cells[6].Value.ToString();
-            txtPitch.Text = dataGridView1.Rows[0].Cells[10].Value.ToString();
-            txtPkt.Text = dataGridView1.Rows[0].Cells[0].Value.ToString();
-            txtRoll.Text = dataGridView1.Rows[0].Cells[11].Value.ToString();
-            txtRPM.Text = dataGridView1.Rows[0].Cells[7].Value.ToString();
-            txtSck.Text = dataGridView1.Rows[0].Cells[5].Value.ToString();
-            txtTkm.Text = dataGridView1.Rows[0].Cells[14].Value.ToString();
-            txtYaw.Text = dataGridView1.Rows[0].Cells[12].Value.ToString();
-            txtHiz.Text = dataGridView1.Rows[0].Cells[4].Value.ToString();
-            txtYks.Text = dataGridView1.Rows[0].Cells[3].Value.ToString();
+            txtBsn.Text =   dataset[0].Basinc.ToString();
+            txtDns.Text =   dataset[0].Donus_Sayisi.ToString();
+            txtGnd.Text =   dataset[0].Gonderme_Zamani.ToString();
+            txtGPSlg.Text = dataset[0].GPS_Long.ToString();
+            txtGPSlt.Text = dataset[0].GPS_Lat.ToString();
+            txtPil.Text =   dataset[0].Pil_Gerilimi.ToString();
+            txtPitch.Text = dataset[0].Pitch.ToString();
+            txtPkt.Text =   dataset[0].Paket_No.ToString();
+            txtRoll.Text =  dataset[0].Roll.ToString();
+            txtRPM.Text =   dataset[0].RPM.ToString();
+            txtSck.Text =   dataset[0].Sicaklik.ToString();
+            txtTkm.Text =   dataset[0].Takim_No.ToString();
+            txtYaw.Text =   dataset[0].Yaw.ToString();
+            txtHiz.Text =   dataset[0].Inis_Hizi.ToString();
+            txtYks.Text =   dataset[0].Yukseklik.ToString();
+            txtStatu.Text = dataset[0].statu.ToString();
+        }
 
-            this.chtBsn.Series["Basınç"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[2].Value.ToString()));
-            this.chtDns.Series["Dönüş Sayısı"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[13].Value.ToString()));
-            this.chtGPSLg.Series["GPS Long"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[8].Value.ToString()));
-            this.chtGPSLt.Series["GPS Lot"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[9].Value.ToString()));
-            this.chtHiz.Series["İniş Hızı"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[4].Value.ToString()));
-            this.chtPil.Series["Pil Gerilimi"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-              Convert.ToInt32(dataGridView1.Rows[1].Cells[6].Value.ToString()));
-            this.chtPtc.Series["Pitch"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[10].Value.ToString()));
-            this.chtRoll.Series["Roll"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[11].Value.ToString()));
-            this.chtRPM.Series["RPM"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[7].Value.ToString()));
-            this.chtSck.Series["Sıcaklık"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                float.Parse(dataGridView1.Rows[1].Cells[5].Value.ToString()));
-            this.chtYaw.Series["Yaw"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[12].Value.ToString()));
-            this.chtYks.Series["Yükseklik"].Points.AddXY(dataGridView1.Rows[0].Cells[1].Value.ToString(),
-                Convert.ToInt32(dataGridView1.Rows[1].Cells[3].Value.ToString()));
+
+
+       
+            private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                serialPort1.Write(rhctxtGirdi.Text);
+
+                txtVdGndDnt.Text = ("Gönderme başarılı.");
+
+            }
+            catch (Exception)
+            {
+                txtVdGndDnt.Text = ("Gönderme başarısız.");
+
+            }
 
         }
 
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void tmrView_Tick(object sender, EventArgs e)
         {
+            if (_data != _oldData)
+            {
+                _oldData = _data;
+            string[] pots = _data.Split(',');
+
+            var tele = new Telemetri
+            {
+                statu = 1,
+                Basinc = float.Parse(pots[7]) / 100,
+                Donus_Sayisi = 315,
+                Roll = 365,
+                GPS_Long = 37,
+                Gonderme_Zamani = DateTime.Now,
+                Takim_No = 55502,
+                GPS_Lat = 41,
+                Inis_Hizi = 3657,
+                Paket_No = 5372,
+                Pil_Gerilimi = 457,
+                Pitch = float.Parse(pots[1]) / 100,
+                RPM = 34,
+                Yaw = float.Parse(pots[5]) / 100,
+                Yukseklik = float.Parse(pots[8]) / 100,
+                Sicaklik = float.Parse(pots[6]) / 100
+            };
+
+
+            Telemetri.Add(tele);
+            dataGridView1.DataSource = dataset = Telemetri.GetAll();
+
+            this.chtBsn.Series["Basınç"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Basinc);
+            this.chtDns.Series["Dönüş Sayısı"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Donus_Sayisi);
+            this.chtGPSLg.Series["GPS Long"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.GPS_Long);
+            this.chtGPSLt.Series["GPS Lat"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.GPS_Lat);
+            this.chtHiz.Series["İniş Hızı"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Inis_Hizi);
+            this.chtPil.Series["Pil Gerilimi"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Pil_Gerilimi);
+            this.chtPtc.Series["Pitch"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Pitch);
+            this.chtRoll.Series["Roll"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Roll);
+            this.chtRPM.Series["RPM"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.RPM);
+            this.chtSck.Series["Sıcaklık"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Sicaklik);
+            this.chtYaw.Series["Yaw"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Yaw);
+            this.chtYks.Series["Yükseklik"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Yukseklik);
+
+               
+            }
 
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //form kapandığında veri akışını kapatıyoruz.
-
-            IsClosed = true;
-            if (Port.IsOpen)
-                Port.Close();
-        }    
-
-        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
-        {
-           
+            Environment.Exit(0);
         }
 
-        private void txtDataSck_TextChanged(object sender, EventArgs e)
+        private void btnMap_Click(object sender, EventArgs e)
         {
-            txtDataSck.Visible = false;
-        }
-
-        private void serialPort1_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
-        {
-           
+          
         }
     }
 }
