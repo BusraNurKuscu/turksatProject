@@ -74,15 +74,7 @@ namespace turksatdeneme_6
             System.Windows.Forms.DataVisualization.Charting.Series series24 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.Sayfa1 = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.txtStatu = new System.Windows.Forms.TextBox();
-            this.lblStatu = new System.Windows.Forms.Label();
-            this.lblPort = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnGnd = new System.Windows.Forms.Button();
-            this.txtVdGndDnt = new System.Windows.Forms.TextBox();
-            this.rhctxtGirdi = new System.Windows.Forms.RichTextBox();
-            this.txtVdMtn = new System.Windows.Forms.TextBox();
+            this.txtDataSck = new System.Windows.Forms.TextBox();
             this.chtYks = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chtRPM = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chtPil = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -136,17 +128,13 @@ namespace turksatdeneme_6
             this.chtDns = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.map = new GMap.NET.WindowsForms.GMapControl();
-            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
+            this.Port1 = new System.IO.Ports.SerialPort(this.components);
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.tmrView = new System.Windows.Forms.Timer(this.components);
-            this.cmbPort = new System.Windows.Forms.ComboBox();
-            this.btnMap = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.Sayfa1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chtYks)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chtRPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chtPil)).BeginInit();
@@ -166,14 +154,12 @@ namespace turksatdeneme_6
             ((System.ComponentModel.ISupportInitialize)(this.chtDns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.Sayfa1);
             this.tabControl1.Controls.Add(this.Sayfa2);
-            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl1.Name = "tabControl1";
@@ -184,8 +170,7 @@ namespace turksatdeneme_6
             // Sayfa1
             // 
             this.Sayfa1.BackColor = System.Drawing.Color.Navy;
-            this.Sayfa1.Controls.Add(this.groupBox4);
-            this.Sayfa1.Controls.Add(this.groupBox3);
+            this.Sayfa1.Controls.Add(this.txtDataSck);
             this.Sayfa1.Controls.Add(this.chtYks);
             this.Sayfa1.Controls.Add(this.chtRPM);
             this.Sayfa1.Controls.Add(this.chtPil);
@@ -202,97 +187,15 @@ namespace turksatdeneme_6
             this.Sayfa1.Size = new System.Drawing.Size(2051, 1080);
             this.Sayfa1.TabIndex = 0;
             this.Sayfa1.Text = " Sayfa1";
+            this.Sayfa1.Click += new System.EventHandler(this.Sayfa1_Click);
             // 
-            // groupBox4
+            // txtDataSck
             // 
-            this.groupBox4.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.groupBox4.Controls.Add(this.cmbPort);
-            this.groupBox4.Controls.Add(this.txtStatu);
-            this.groupBox4.Controls.Add(this.lblStatu);
-            this.groupBox4.Controls.Add(this.lblPort);
-            this.groupBox4.Location = new System.Drawing.Point(149, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(289, 128);
-            this.groupBox4.TabIndex = 36;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "groupBox4";
-            // 
-            // txtStatu
-            // 
-            this.txtStatu.Location = new System.Drawing.Point(82, 76);
-            this.txtStatu.Name = "txtStatu";
-            this.txtStatu.Size = new System.Drawing.Size(189, 22);
-            this.txtStatu.TabIndex = 3;
-            // 
-            // lblStatu
-            // 
-            this.lblStatu.AutoSize = true;
-            this.lblStatu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblStatu.Location = new System.Drawing.Point(18, 79);
-            this.lblStatu.Name = "lblStatu";
-            this.lblStatu.Size = new System.Drawing.Size(41, 17);
-            this.lblStatu.TabIndex = 2;
-            this.lblStatu.Text = "Statü";
-            // 
-            // lblPort
-            // 
-            this.lblPort.AutoSize = true;
-            this.lblPort.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblPort.Location = new System.Drawing.Point(18, 21);
-            this.lblPort.Name = "lblPort";
-            this.lblPort.Size = new System.Drawing.Size(42, 17);
-            this.lblPort.TabIndex = 0;
-            this.lblPort.Text = "Port :";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.groupBox3.Controls.Add(this.btnGnd);
-            this.groupBox3.Controls.Add(this.txtVdGndDnt);
-            this.groupBox3.Controls.Add(this.rhctxtGirdi);
-            this.groupBox3.Controls.Add(this.txtVdMtn);
-            this.groupBox3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.groupBox3.Location = new System.Drawing.Point(1489, 478);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(403, 357);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "VideoGönder";
-            // 
-            // btnGnd
-            // 
-            this.btnGnd.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnGnd.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnGnd.Location = new System.Drawing.Point(137, 238);
-            this.btnGnd.Name = "btnGnd";
-            this.btnGnd.Size = new System.Drawing.Size(135, 42);
-            this.btnGnd.TabIndex = 36;
-            this.btnGnd.Text = "Gönder";
-            this.btnGnd.UseVisualStyleBackColor = false;
-            this.btnGnd.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // txtVdGndDnt
-            // 
-            this.txtVdGndDnt.Location = new System.Drawing.Point(20, 303);
-            this.txtVdGndDnt.Name = "txtVdGndDnt";
-            this.txtVdGndDnt.Size = new System.Drawing.Size(360, 22);
-            this.txtVdGndDnt.TabIndex = 37;
-            // 
-            // rhctxtGirdi
-            // 
-            this.rhctxtGirdi.Location = new System.Drawing.Point(20, 106);
-            this.rhctxtGirdi.Name = "rhctxtGirdi";
-            this.rhctxtGirdi.Size = new System.Drawing.Size(360, 108);
-            this.rhctxtGirdi.TabIndex = 36;
-            this.rhctxtGirdi.Text = "";
-            // 
-            // txtVdMtn
-            // 
-            this.txtVdMtn.Location = new System.Drawing.Point(20, 51);
-            this.txtVdMtn.Name = "txtVdMtn";
-            this.txtVdMtn.Size = new System.Drawing.Size(360, 22);
-            this.txtVdMtn.TabIndex = 36;
-            this.txtVdMtn.Text = "Göndermek istediğiniz dosyayı giriniz.";
+            this.txtDataSck.Location = new System.Drawing.Point(207, 78);
+            this.txtDataSck.Name = "txtDataSck";
+            this.txtDataSck.Size = new System.Drawing.Size(100, 22);
+            this.txtDataSck.TabIndex = 1;
+            this.txtDataSck.TextChanged += new System.EventHandler(this.txtDataSck_TextChanged);
             // 
             // chtYks
             // 
@@ -442,6 +345,7 @@ namespace turksatdeneme_6
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "GüncelTelemetriPaketi";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // txtGPSlg
             // 
@@ -503,7 +407,7 @@ namespace turksatdeneme_6
             this.lblGPSlt.Name = "lblGPSlt";
             this.lblGPSlt.Size = new System.Drawing.Size(69, 17);
             this.lblGPSlt.TabIndex = 22;
-            this.lblGPSlt.Text = "GPS Lat :";
+            this.lblGPSlt.Text = "GPS Lot :";
             // 
             // lblGPSlg
             // 
@@ -707,7 +611,7 @@ namespace turksatdeneme_6
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(403, 438);
+            this.groupBox1.Size = new System.Drawing.Size(403, 439);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Kamera";
@@ -785,6 +689,7 @@ namespace turksatdeneme_6
             this.Sayfa2.Size = new System.Drawing.Size(2051, 1080);
             this.Sayfa2.TabIndex = 1;
             this.Sayfa2.Text = "Sayfa2";
+            this.Sayfa2.Click += new System.EventHandler(this.Sayfa2_Click);
             // 
             // chtYaw
             // 
@@ -814,7 +719,7 @@ namespace turksatdeneme_6
             this.chtGPSLg.Name = "chtGPSLg";
             this.chtGPSLg.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry;
             series20.ChartArea = "ChartArea1";
-            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
+            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Radar;
             series20.Legend = "Legend1";
             series20.Name = "GPS Long";
             this.chtGPSLg.Series.Add(series20);
@@ -852,7 +757,7 @@ namespace turksatdeneme_6
             series22.ChartArea = "ChartArea1";
             series22.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
             series22.Legend = "Legend1";
-            series22.Name = "GPS Lat";
+            series22.Name = "GPS Lot";
             this.chtGPSLt.Series.Add(series22);
             this.chtGPSLt.Size = new System.Drawing.Size(488, 245);
             this.chtGPSLt.TabIndex = 6;
@@ -907,6 +812,7 @@ namespace turksatdeneme_6
             this.dataGridView1.Size = new System.Drawing.Size(1737, 242);
             this.dataGridView1.TabIndex = 3;
             this.dataGridView1.DataSourceChanged += new System.EventHandler(this.dataGridView1_DataSourceChanged);
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // pictureBox2
             // 
@@ -919,85 +825,28 @@ namespace turksatdeneme_6
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
             // 
-            // tabPage1
+            // tmrRefresh
             // 
-            this.tabPage1.Controls.Add(this.btnMap);
-            this.tabPage1.Controls.Add(this.map);
-            this.tabPage1.Controls.Add(this.splitter1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(2051, 1080);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "Sayfa3";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tmrRefresh.Enabled = true;
+            this.tmrRefresh.Interval = 400;
+            this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
             // 
-            // map
+            // Port1
             // 
-            this.map.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.map.Bearing = 0F;
-            this.map.CanDragMap = true;
-            this.map.EmptyTileColor = System.Drawing.Color.Navy;
-            this.map.GrayScaleMode = false;
-            this.map.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.map.LevelsKeepInMemory = 5;
-            this.map.Location = new System.Drawing.Point(11, 11);
-            this.map.MarkersEnabled = true;
-            this.map.MaxZoom = 2;
-            this.map.MinZoom = 2;
-            this.map.MouseWheelZoomEnabled = true;
-            this.map.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.map.Name = "map";
-            this.map.NegativeMode = false;
-            this.map.PolygonsEnabled = true;
-            this.map.RetryLoadTile = 0;
-            this.map.RoutesEnabled = true;
-            this.map.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.map.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.map.ShowTileGridLines = false;
-            this.map.Size = new System.Drawing.Size(1875, 790);
-            this.map.TabIndex = 1;
-            this.map.Zoom = 0D;
+            this.Port1.DtrEnable = true;
+            this.Port1.PortName = "COM7";
             // 
-            // splitter1
+            // backgroundWorker2
             // 
-            this.splitter1.Location = new System.Drawing.Point(3, 3);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(1893, 1074);
-            this.splitter1.TabIndex = 0;
-            this.splitter1.TabStop = false;
+            this.backgroundWorker2.WorkerReportsProgress = true;
+            this.backgroundWorker2.WorkerSupportsCancellation = true;
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
             // 
             // serialPort1
             // 
             this.serialPort1.PortName = "COM7";
-            // 
-            // tmrView
-            // 
-            this.tmrView.Enabled = true;
-            this.tmrView.Interval = 500;
-            this.tmrView.Tick += new System.EventHandler(this.tmrView_Tick);
-            // 
-            // cmbPort
-            // 
-            this.cmbPort.FormattingEnabled = true;
-            this.cmbPort.Location = new System.Drawing.Point(82, 21);
-            this.cmbPort.Name = "cmbPort";
-            this.cmbPort.Size = new System.Drawing.Size(189, 24);
-            this.cmbPort.TabIndex = 4;
-            // 
-            // btnMap
-            // 
-            this.btnMap.BackColor = System.Drawing.Color.DarkBlue;
-            this.btnMap.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnMap.Location = new System.Drawing.Point(674, 820);
-            this.btnMap.Name = "btnMap";
-            this.btnMap.Size = new System.Drawing.Size(324, 46);
-            this.btnMap.TabIndex = 2;
-            this.btnMap.Text = "Konumu Haritada Göster";
-            this.btnMap.UseVisualStyleBackColor = false;
-            this.btnMap.Click += new System.EventHandler(this.btnMap_Click);
+            this.serialPort1.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(this.serialPort1_ErrorReceived);
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // Form1
             // 
@@ -1010,14 +859,10 @@ namespace turksatdeneme_6
             this.Name = "Form1";
             this.Text = "SamsunUzayTeknolojileri";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load_1);
             this.tabControl1.ResumeLayout(false);
             this.Sayfa1.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.Sayfa1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chtYks)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chtRPM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chtPil)).EndInit();
@@ -1038,7 +883,6 @@ namespace turksatdeneme_6
             ((System.ComponentModel.ISupportInitialize)(this.chtDns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1056,8 +900,11 @@ namespace turksatdeneme_6
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Timer tmrRefresh;
         private System.Windows.Forms.GroupBox groupBox2;
+        private BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.Label c;
         private System.Windows.Forms.TextBox txtGnd;
         private System.Windows.Forms.Label lblGnd;
@@ -1102,21 +949,8 @@ namespace turksatdeneme_6
         private System.Windows.Forms.DataVisualization.Charting.Chart chtRoll;
         private System.Windows.Forms.DataVisualization.Charting.Chart chtDns;
         private System.IO.Ports.SerialPort serialPort1;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox txtVdGndDnt;
-        private System.Windows.Forms.RichTextBox rhctxtGirdi;
-        private System.Windows.Forms.TextBox txtVdMtn;
-        private System.Windows.Forms.Button btnGnd;
-        private System.Windows.Forms.Timer tmrView;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Splitter splitter1;
-        private GMap.NET.WindowsForms.GMapControl map;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox txtStatu;
-        private System.Windows.Forms.Label lblStatu;
-        private System.Windows.Forms.Label lblPort;
-        private System.Windows.Forms.ComboBox cmbPort;
-        private System.Windows.Forms.Button btnMap;
+        private System.IO.Ports.SerialPort Port1;
+        private System.Windows.Forms.TextBox txtDataSck;
     }
 }
 
