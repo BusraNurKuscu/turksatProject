@@ -16,7 +16,7 @@ namespace turksatdeneme_6
         public static object Port1 { get; internal set; }
 
         //Litedb ile database de tutulacak verileri bu envertere ekliyoruz.
-        public float Paket_No { get; set; } //0
+        public int Paket_No { get; set; } //0
         public DateTime Gonderme_Zamani { get; set; } //1
         public float Basinc { get; set; } //2
         public float Yukseklik{ get; set; } //3
@@ -25,12 +25,12 @@ namespace turksatdeneme_6
         public float Pil_Gerilimi { get; set; }//6
         public float RPM { get; set; }//7
         public float GPS_Long { get; set; }//8
-        public float GPS_Lat { get; set; }//9
+        public float GPS_Lot { get; set; }//9
         public float Pitch { get; set; }//10
         public float Roll { get; set; }//11
         public float Yaw { get; set; }//12
         public float Donus_Sayisi { get; set; }//13
-        public float Takim_No { get; set; }//14
+        public int Takim_No { get; set; }//14
         public string Statu { get; set; }//15
 
         public static void Add(Telemetri telemetri)//ekle fonksiyonu oluşturarak datalarımızı value olarak ekliyoruz.
