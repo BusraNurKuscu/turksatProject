@@ -1,7 +1,7 @@
 #!/bin/bash
 # github.com/omerayyildiz :)
 projectCurrentPath="/c/Users/CASPER/Desktop/busra/turksat/turksatProject/"
-cd $projectCurrentPath # Reponun yeri değiştiği zaman script projeyi bulamaz. 
+cd $projectCurrentPath # direkt cd'ye verilmeyip değişkene atanarak yol verildi. windows sorun yaratıyor. 
 
 
 yellow=`tput setaf 3`
@@ -12,7 +12,7 @@ magenta=`tput setaf 5`
 reset=`tput sgr0`
 line="${yellow}--------------------------------------${reset}"
 
-#branch kontrol mekanizması
+
 echo -e "a.Yedekten Geri Yükleme\nb.Yedek Alma"
 read -p "${yellow}Hangi işlemi seçmek istiyorsun Büşra?(a or b):${reset}" secim
  echo $line
@@ -20,7 +20,7 @@ read -p "${yellow}Hangi işlemi seçmek istiyorsun Büşra?(a or b):${reset}" se
  sleep 7
 clear
 
-#a tuşu buraya dallandırır. düzenleme: aptal aptal işler
+
 if [ $secim == 'a' ]
 then
    echo -e "İlgili projede git log yazarak hashi öğrenebilirsin!\n$line"
@@ -42,7 +42,6 @@ then
        clear
        exit
 else
-  #enter veya herhangi bir tuş buraya dallandırır. düzenleme: dallandırmıyormuş vesselam o yüzden casein içine koydum.
   echo "${cyan}Turksat Proje Güncelleme Paneline Hoşgeldin!${reset}"
   git add .
   echo "${yellow}Bugün ne değişiklik yaptın Büşra?:${reset}"
