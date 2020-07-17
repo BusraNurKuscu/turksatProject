@@ -11,7 +11,9 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Diagnostics;
 using System.Threading;
+using GMap.NET.CacheProviders;
 using System.IO;
+using GMap.NET.MapProviders;
 
 namespace turksatdeneme_6
 {
@@ -65,6 +67,8 @@ namespace turksatdeneme_6
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+            var ports = SerialPort.GetPortNames();
+            cmbPort.DataSource = ports;
 
             new Thread(() =>
             {
@@ -123,14 +127,14 @@ namespace turksatdeneme_6
 
                 var tele = new Telemetri
                 {
-                    
+                    Statu = "Beklemede",
                     Basinc = float.Parse(pots[7]) / 100,
                     Donus_Sayisi = 315,
                     Roll = 365,
                     GPS_Long = 37,
                     Gonderme_Zamani = DateTime.Now,
                     Takim_No = 55502,
-                    GPS_Lot = 41,
+                    GPS_Lot = 41 ,
                     Inis_Hizi = 3657,
                     Paket_No = 5372,
                     Pil_Gerilimi = 457,
@@ -159,16 +163,24 @@ namespace turksatdeneme_6
                 this.chtYks.Series["Yükseklik"].Points.AddXY(tele.Gonderme_Zamani.ToString(), tele.Yukseklik);
 
 
+                map.DragButton = MouseButtons.Right;
+                map.MapProvider = GMapProviders.GoogleMap;
+                map.Position = new GMap.NET.PointLatLng(tele.GPS_Long, tele.GPS_Lot);
+                map.MaxZoom = 1000;
+                map.MinZoom = 1;
+                map.Zoom = 10;
+
             }
 
 
+           
         }
 
        
 
         private void dataGridView1_DataSourceChanged(object sender, EventArgs e)
         {
-
+            txtStatu.Text = dataset[0].Statu;
             txtBsn.Text = dataset[0].Basinc.ToString();
             txtDns.Text = dataset[0].Donus_Sayisi.ToString();
             txtGnd.Text = dataset[0].Gonderme_Zamani.ToString();

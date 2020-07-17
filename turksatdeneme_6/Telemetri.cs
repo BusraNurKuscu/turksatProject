@@ -31,7 +31,7 @@ namespace turksatdeneme_6
         public float Yaw { get; set; }//12
         public float Donus_Sayisi { get; set; }//13
         public int Takim_No { get; set; }//14
-
+        public string Statu { get; set; }//15
 
         public static void Add(Telemetri telemetri)//ekle fonksiyonu oluşturarak datalarımızı value olarak ekliyoruz.
         {
